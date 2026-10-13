@@ -1,11 +1,11 @@
-// src/index.ts
+// packages/dsh-mate-extension/src/index.ts
 import { existsSync as existsSync2, mkdirSync as mkdirSync2 } from "node:fs";
 import { homedir } from "node:os";
 import { join as join2 } from "node:path";
 import { createUserMessage } from "@deepseek-ai/dsh-llm";
 import { defineTool } from "@deepseek-ai/dsh-tools";
 
-// ../mate/src/params.ts
+// packages/mate/src/params.ts
 var EMOTION_DECAY = {
   joy: 1 / (45 * 60000),
   trust: 1 / (180 * 60000),
@@ -134,7 +134,7 @@ var CUSP = { dominanceMax: -0.35, arousalMin: 0.6 };
 var MAX_OBSERVATIONS = 64;
 var HABITUATION_TAU = 4 * 3600000;
 
-// ../mate/src/rng.ts
+// packages/mate/src/rng.ts
 function nextRandom(seed) {
   let z = seed + 2654435769 | 0;
   z = Math.imul(z ^ z >>> 16, 569420461);
@@ -164,10 +164,10 @@ var clamp = (x, lo, hi) => x < lo ? lo : x > hi ? hi : x;
 var clamp01 = (x) => clamp(x, 0, 1);
 var clampPad = (x) => clamp(x, -1, 1);
 
-// ../mate/src/types.ts
+// packages/mate/src/types.ts
 var EMOTIONS = ["joy", "trust", "fear", "surprise", "sadness", "disgust", "anger", "anticipation"];
 
-// ../mate/src/quantum.ts
+// packages/mate/src/quantum.ts
 var N = EMOTIONS.length;
 function fromEmotions(emotions, seed) {
   const raw = EMOTIONS.map((e) => Math.max(emotions[e], 0.000001));
@@ -505,7 +505,7 @@ function sanitise(rho) {
   return normalise(out);
 }
 
-// ../mate/src/spark.ts
+// packages/mate/src/spark.ts
 var SEED_BELIEFS = [
   { key: "othersTrustworthy", label: "others are trustworthy", valence: 0.2 },
   { key: "worldSafety", label: "the world is mostly benign", valence: 0.2 }
@@ -640,7 +640,7 @@ function clampConfidence(x) {
   return x;
 }
 
-// ../mate/src/birth.ts
+// packages/mate/src/birth.ts
 var NEUTRAL_CHARACTER = {
   selfWorth: 0.55,
   selfEfficacy: 0.5,
@@ -798,7 +798,7 @@ function sanitiseState(raw, opts = {}) {
   };
   return state;
 }
-// ../mate/src/i18n.ts
+// packages/mate/src/i18n.ts
 function normLang(x) {
   if (typeof x !== "string")
     return "en";
@@ -1158,7 +1158,7 @@ var GUIDANCE = {
 `)
 };
 
-// ../mate/src/memory.ts
+// packages/mate/src/memory.ts
 var MEMORY_LABEL_MAX = 160;
 var MAX_TOPICS = 3;
 var STRENGTH_TAU_MS = 5 * 86400000;
@@ -1462,7 +1462,7 @@ function sanitiseMemory(raw) {
   };
 }
 
-// ../mate/src/kernel.ts
+// packages/mate/src/kernel.ts
 function intensityOf(activations) {
   let s = 0;
   for (const e of EMOTIONS)
@@ -1973,7 +1973,7 @@ function sleepTransition(state, t, opts = {}) {
   };
 }
 
-// ../mate/src/catchup.ts
+// packages/mate/src/catchup.ts
 function systemClock() {
   return {
     now: () => Date.now(),
@@ -2067,7 +2067,7 @@ function tickEvent(t) {
 function perfNow() {
   return typeof performance !== "undefined" ? performance.now() : Date.now();
 }
-// ../mate/src/context.ts
+// packages/mate/src/context.ts
 var DRIFTING_TRAIT_SET = new Set(DRIFTING_TRAITS);
 function q(x) {
   const r = Math.round(x * 100) / 100;
@@ -2258,7 +2258,7 @@ function debugView(state, now) {
 function truncate(s, n) {
   return s.length <= n ? s : `${s.slice(0, n - 1)}…`;
 }
-// ../mate/src/daemon.ts
+// packages/mate/src/daemon.ts
 var HABITUATION_PRUNE_MS = 6 * HABITUATION_TAU;
 function thinkHabit(state, topic, trace, now) {
   const habituation = {};
@@ -2375,7 +2375,7 @@ function replyInclination(state, msgWeight, lang = "en") {
   const reason = lean === "withdrawn" ? L.reWithdrawn : lean === "muted" ? L.reMuted : lean === "open" ? L.reOpen : L.reEager;
   return { value, lean, reason };
 }
-// ../mate/src/judge.ts
+// packages/mate/src/judge.ts
 var JUDGE_SCALE = 2;
 var JUDGE_GAIN = 0.5;
 var JUDGE_NEGATIVITY_BIAS = 2;
@@ -2402,7 +2402,7 @@ function judgeActivations(deltas, confidences) {
   }
   return out;
 }
-// ../mate/src/session.ts
+// packages/mate/src/session.ts
 function emptySessions(maxEntries = 200) {
   return { version: 1, maxEntries, entries: [] };
 }
@@ -2434,7 +2434,7 @@ function sanitiseSessions(raw) {
   const entries = Array.isArray(r.entries) ? r.entries.filter((e) => e && typeof e.open === "number").map((e) => ({ open: e.open, ...typeof e.close === "number" ? { close: e.close } : {} })).slice(-maxEntries) : [];
   return { version: typeof r.version === "number" ? r.version : 1, maxEntries, entries };
 }
-// ../mate/src/store.ts
+// packages/mate/src/store.ts
 import { existsSync, mkdirSync, readFileSync, renameSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 var STATE_FILE = "state.json";
@@ -2477,7 +2477,7 @@ function save(p) {
   writeJsonAtomic(join(p.dir, MEMORY_FILE), p.memory);
   writeJsonAtomic(join(p.dir, SESSIONS_FILE), p.sessions);
 }
-// ../coding-agent/src/extensions/mate/appraisal.ts
+// packages/coding-agent/src/extensions/mate/appraisal.ts
 var QUESTION_RE = /\?\s*$|？\s*$|吗[？?]?\s*$|\b(why|what|how|when|where|who|can you|could you|would you|please)\b|为什么|怎么|如何|什么|哪里|谁|能不能|可不可以|可以吗|行吗|好吗|是不是|有没有|请问|帮我|麻烦/i;
 var TASK_RE = /\b(fix|write|build|run|install|create|make|edit|refactor|debug|implement|code|script|deploy)\b|修复|调试|重构|部署|安装|运行一下|跑一下|写一个|写个|创建|生成|实现|改一下|改代码|脚本/i;
 function appraise(text) {
@@ -2489,7 +2489,7 @@ function appraise(text) {
   return { intent, weight: intent === "chat" ? 0 : 0.2 };
 }
 
-// src/index.ts
+// packages/dsh-mate-extension/src/index.ts
 var BEAT_GRID_MS = 60000;
 var IMPULSE_SUPPRESS = 0.5;
 function stateDir() {

@@ -7,9 +7,21 @@
 	"main": "./dist/index.js",
 	"files": [
 		"dist",
+		"packages",
+		"scripts",
+		"tsconfig.json",
 		"cordis.patch.yml",
-		"README.md"
+		"README.md",
+		"LICENSE"
 	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/m-rui001/dsh-mate-companion.git"
+	},
+	"homepage": "https://github.com/m-rui001/Persisto-Mate",
+	"scripts": {
+		"build": "node scripts/build.mjs"
+	},
 	"dsh": {
 		"bundle": {
 			"patch": "./cordis.patch.yml"

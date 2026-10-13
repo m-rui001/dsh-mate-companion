@@ -44,3 +44,22 @@ different body.
 
 Requires Node 22.19+/24 per the harness. The harness is a developer preview; its plugin surface
 may change under us.
+
+## Source
+
+MIT, in [LICENSE](LICENSE). This repository is a published mirror of the
+[Persisto-Mate monorepo](https://github.com/m-rui001/Persisto-Mate), and it carries the source of the
+bundle rather than only the bundle: `packages/` holds the files `dist/index.js` is built from, at
+their monorepo paths, so no import had to be rewritten to put them here — this host
+(`packages/dsh-mate-extension/src`), the MATE kernel (`packages/mate/src`) and the one shared
+affect-appraisal file it imports from the pi host
+(`packages/coding-agent/src/extensions/mate/appraisal.ts`).
+
+Rebuild it to check that claim:
+
+```sh
+bun install
+npm run build   # writes dist/index.js from the source in packages/
+```
+
+Send changes upstream in the monorepo — the next publish overwrites what is here.

@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "preserve",
+		"moduleResolution": "bundler",
+		"lib": [
+			"esnext"
+		],
+		"baseUrl": ".",
+		"strict": true,
+		"skipLibCheck": true,
+		"noEmit": true,
+		"paths": {
+			"@earendil-works/pi-mate": [
+				"./packages/mate/src/index.ts"
+			]
+		}
+	},
+	"include": [
+		"packages"
+	]
+}
